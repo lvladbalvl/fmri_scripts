@@ -11,7 +11,7 @@ function [] = projectMasks(pathn,FMprefix,AnatPrefixFull,maskdir)
 % Иначе они воспримутся как обычные маски (хотя это просто изображения
 % интерполированное на размер вокселя 1.5х1.5х1.5)
 cd(maskdir);
-indFuncPrefix='umeanf';
+indFuncPrefix='ResI';
 maskFiles=cat(1,dir('*.nii'),dir('*.img'));
 p=length(maskFiles);
 z1=0;

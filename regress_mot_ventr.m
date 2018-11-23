@@ -1,17 +1,20 @@
-function [ ] = regress_mot_ventr( pathn,FMprefix,AnatPrefix,mask,TR )
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+function [ ] = regress_mot_ventr( pathn,FMprefix,AnatPrefix,mask,TR,regrdir)
+%регрессия от движений и сигнала в желудочках
+% регрессирует фМРТ изображения от 6 параметров движения из файлы rp*.txt,
+% лежащего в каждой обработанной фМРТ директории с префиксом FMprefix. В
+% переменной mask задается путь к файлу с маской желудочков. Из директории
+% со структурными данными с префиксом AnatPrefix берутся файлы wms*.nii и
+% iy_s*.nii. Первый это структурка в MNI пространстве, второй это файл с 
+% информацией по деформации изображения из MNI в инд. пространство этого
+% испытуемого
 p=1;
 If=[];
 cd(pathn);
-filtflag=0;
-%[B,A]=butter(3,[0.01*2*TR 0.1*2*TR]);
-dt=2;
 z1=0;
 D=dir;
 V=struct;
-for z=3:length(D)
-    if isdir(D(z).name)
+for z=1:length(D)
+    if isdir(D(z).name)&&~strcmp(D(z).name,'..')&&~strcmp(D(z).name,'.')
         cd(D(z).name);
         Din=dir;
         for k=1:length(Din)
@@ -90,7 +93,7 @@ swurfNames(i)={strcat(pathn,'\',D(z).name,'\',funcnm,'\',swurfNames{i})};
 end
 regressout_job;
 matlabbatch{1}.spm.stats.fmri_spec.sess.multi_reg={strcat(pathn,'\',D(z).name,'\',funcnm,'\',rpTxt.name)};
-    inputs{1} = {strcat(pathn,'\',D(z).name,'\regrindspace')}; % fMRI model specification: Directory - cfg_files
+    inputs{1} = {strcat(pathn,'\',D(z).name,'\',regrdir)}; % fMRI model specification: Directory - cfg_files
     inputs{2} = TR; % fMRI model specification: Interscan interval - cfg_entry
     inputs{3} = swurfNames; % fMRI model specification: Scans - cfg_files
     inputs{4} = 'Ventricles Signal'; % fMRI model specification: Name - cfg_entry

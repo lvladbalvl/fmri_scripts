@@ -5,7 +5,7 @@ function [ ] = regress_mot( pathn,FMprefix,TR,rergDir )
 %это urf и swurf для данных курчатника (первый, если хотим в инд.
 %пространстве, второй - если в MNI) и rf и swrf - для данных ЦПР
 cd(pathn);
-indFuncPrefix='urf';
+indFuncPrefix='rf';
 z1=0;
 D=dir;
 V=struct;
@@ -54,7 +54,7 @@ for z=1:length(D)
         end
         mkdir(rergDir);
         cd(funcnm);
-        rpTxt=dir('*.txt');
+        rpTxt=dir('rp*.txt');
         RFuncImg=dir(strcat(indFuncPrefix,'*.img'));
         RFuncImgCell=struct2cell(RFuncImg);
         RFuncImgNames=RFuncImgCell(1,:);
